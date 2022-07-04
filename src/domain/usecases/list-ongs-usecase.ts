@@ -1,6 +1,10 @@
 import type { OngModel } from '../models/ong'
 
-type ListOngsRepositoryType = {
+export type ListOngsRepositoryType = {
+  perform: () => Promise<OngModel[]>
+}
+
+export type ListOngsUseCaseType = {
   perform: () => Promise<OngModel[]>
 }
 

@@ -1,62 +1,63 @@
-import { OngModel } from '../models/ong'
-import { ListOngsUseCase } from './list-ongs-usecase'
+import { ListOngsRepositoryType, ListOngsUseCase, ListOngsUseCaseType } from './list-ongs-usecase'
 
-function ListOngsRepository () {
+function ListOngsRepository (): ListOngsRepositoryType {
   return {
     perform: jest.fn()
   }
 }
 
+function makeFakeResponse () {
+  return [
+    {
+      id: 'any id',
+      email: 'any@mail.com',
+      city: 'any city',
+      name: 'any name',
+      whatsapp: '98900000000',
+      uf: 'uf'
+    },
+    {
+      id: 'any other id',
+      email: 'any_other@mail.com',
+      city: 'any city',
+      name: 'any other name',
+      whatsapp: '98900000001',
+      uf: 'uf'
+    }
+  ]
+}
+
 describe('ListOngsUseCase', () => {
+  let listOngsRepository: ListOngsRepositoryType
+  let sut: ListOngsUseCaseType
+
+  beforeEach(() => {
+    listOngsRepository = ListOngsRepository()
+    sut = ListOngsUseCase(listOngsRepository)
+  })
+
   it('calls ListOngsRepository once', async () => {
-    const listOngsRepository = ListOngsRepository()
-    const listOngsUseCase = ListOngsUseCase(listOngsRepository)
     const listOngsRepositorySpy = jest.spyOn(listOngsRepository, 'perform')
 
-    await listOngsUseCase.perform()
+    await sut.perform()
 
     expect(listOngsRepositorySpy).toHaveBeenCalledTimes(1)
   })
   it('throws if ListOngsRepository throws', async () => {
-    const listOngsRepository = ListOngsRepository()
-    const listOngsUseCase = ListOngsUseCase(listOngsRepository)
-
     jest.spyOn(listOngsRepository, 'perform').mockImplementationOnce(() => {
       throw new Error()
     })
 
-    const promise = listOngsUseCase.perform()
+    const promise = sut.perform()
 
     expect(promise).rejects.toThrow()
   })
   it('retuns ongs on success', async () => {
-    const listOngsRepository = ListOngsRepository()
-    const listOngsUseCase = ListOngsUseCase(listOngsRepository)
+    jest.spyOn(listOngsRepository, 'perform').mockResolvedValueOnce(makeFakeResponse())
 
-    const expectedResponse: OngModel[] = [
-      {
-        id: 'any id',
-        email: 'any@mail.com',
-        city: 'any city',
-        name: 'any name',
-        whatsapp: '98900000000',
-        uf: 'uf'
-      },
-      {
-        id: 'any other id',
-        email: 'any_other@mail.com',
-        city: 'any city',
-        name: 'any other name',
-        whatsapp: '98900000001',
-        uf: 'uf'
-      }
-    ]
-
-    jest.spyOn(listOngsRepository, 'perform').mockResolvedValueOnce(expectedResponse)
-
-    const ongs = await listOngsUseCase.perform()
+    const ongs = await sut.perform()
 
     expect(ongs).toBeTruthy()
-    expect(ongs).toEqual(expectedResponse)
+    expect(ongs).toEqual(makeFakeResponse())
   })
 })
