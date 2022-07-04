@@ -1,21 +1,9 @@
 import { OngModel } from '../models/ong'
-
-type ListOngsRepositoryType = {
-  perform: () => Promise<OngModel[]>
-}
+import { ListOngsUseCase } from './list-ongs-usecase'
 
 function ListOngsRepository () {
   return {
     perform: jest.fn()
-  }
-}
-
-function ListOngsUseCase (listOngsRepository: ListOngsRepositoryType) {
-  async function perform () {
-    return await listOngsRepository.perform()
-  }
-  return {
-    perform
   }
 }
 
