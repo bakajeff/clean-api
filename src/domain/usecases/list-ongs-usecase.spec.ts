@@ -12,7 +12,7 @@ function ListOngsRepository () {
 
 function ListOngsUseCase (listOngsRepository: ListOngsRepositoryType) {
   async function perform () {
-    await listOngsRepository.perform()
+    return await listOngsRepository.perform()
   }
   return {
     perform
@@ -40,5 +40,35 @@ describe('ListOngsUseCase', () => {
     const promise = listOngsUseCase.perform()
 
     expect(promise).rejects.toThrow()
+  })
+  it('retuns ongs on success', async () => {
+    const listOngsRepository = ListOngsRepository()
+    const listOngsUseCase = ListOngsUseCase(listOngsRepository)
+
+    const expectedResponse: OngModel[] = [
+      {
+        id: 'any id',
+        email: 'any@mail.com',
+        city: 'any city',
+        name: 'any name',
+        whatsapp: '98900000000',
+        uf: 'uf'
+      },
+      {
+        id: 'any other id',
+        email: 'any_other@mail.com',
+        city: 'any city',
+        name: 'any other name',
+        whatsapp: '98900000001',
+        uf: 'uf'
+      }
+    ]
+
+    jest.spyOn(listOngsRepository, 'perform').mockResolvedValueOnce(expectedResponse)
+
+    const ongs = await listOngsUseCase.perform()
+
+    expect(ongs).toBeTruthy()
+    expect(ongs).toEqual(expectedResponse)
   })
 })
