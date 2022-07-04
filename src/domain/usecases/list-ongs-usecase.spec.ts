@@ -20,7 +20,7 @@ function ListOngsUseCase (listOngsRepository: ListOngsRepositoryType) {
 }
 
 describe('ListOngsUseCase', () => {
-  it('calls ListOngRepository once', async () => {
+  it('calls ListOngsRepository once', async () => {
     const listOngsRepository = ListOngsRepository()
     const listOngsUseCase = ListOngsUseCase(listOngsRepository)
     const listOngsRepositorySpy = jest.spyOn(listOngsRepository, 'perform')
@@ -28,5 +28,17 @@ describe('ListOngsUseCase', () => {
     await listOngsUseCase.perform()
 
     expect(listOngsRepositorySpy).toHaveBeenCalledTimes(1)
+  })
+  it('throws if ListOngsRepository throws', async () => {
+    const listOngsRepository = ListOngsRepository()
+    const listOngsUseCase = ListOngsUseCase(listOngsRepository)
+
+    jest.spyOn(listOngsRepository, 'perform').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const promise = listOngsUseCase.perform()
+
+    expect(promise).rejects.toThrow()
   })
 })
