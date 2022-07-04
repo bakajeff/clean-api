@@ -18,10 +18,10 @@ describe('CreateOngRepositorySql', () => {
 
   it('calls UniqueIdGenerator once', async () => {
     const uniqueIdGenerator = UniqueIdGenerator()
-    const createOngRepositorySql = CreateOngRepositorySql(uniqueIdGenerator)
+    const sut = CreateOngRepositorySql(uniqueIdGenerator)
 
     const uniqueIdGeneratorSpy = jest.spyOn(uniqueIdGenerator, 'perform').mockReturnValueOnce('any id')
-    await createOngRepositorySql.perform({
+    await sut.perform({
       name: 'any name',
       email: 'any@mail.com',
       whatsapp: '98900000000',
@@ -33,13 +33,13 @@ describe('CreateOngRepositorySql', () => {
   })
   it('throws if UniqueIdGenerator throws', async () => {
     const uniqueIdGenerator = UniqueIdGenerator()
-    const createOngRepositorySql = CreateOngRepositorySql(uniqueIdGenerator)
+    const sut = CreateOngRepositorySql(uniqueIdGenerator)
 
     jest.spyOn(uniqueIdGenerator, 'perform').mockImplementationOnce(() => {
       throw new Error()
     })
 
-    const promise = createOngRepositorySql.perform({
+    const promise = sut.perform({
       name: 'any name',
       email: 'any@mail.com',
       whatsapp: '98900000000',
@@ -51,11 +51,11 @@ describe('CreateOngRepositorySql', () => {
   })
   it('returns an valid ong on success', async () => {
     const uniqueIdGenerator = UniqueIdGenerator()
-    const createOngRepositorySql = CreateOngRepositorySql(uniqueIdGenerator)
+    const sut = CreateOngRepositorySql(uniqueIdGenerator)
 
     jest.spyOn(uniqueIdGenerator, 'perform').mockReturnValueOnce('valid id')
 
-    const ong = await createOngRepositorySql.perform({
+    const ong = await sut.perform({
       name: 'any name',
       email: 'any@mail.com',
       whatsapp: '98900000000',
