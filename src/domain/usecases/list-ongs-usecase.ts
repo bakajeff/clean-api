@@ -8,7 +8,7 @@ export type ListOngsUseCaseType = {
   perform: () => Promise<OngModel[]>
 }
 
-export function ListOngsUseCase (listOngsRepository: ListOngsRepositoryType) {
+export function ListOngsUseCase (listOngsRepository: ListOngsRepositoryType): ListOngsUseCaseType {
   async function perform () {
     return await listOngsRepository.perform()
   }
