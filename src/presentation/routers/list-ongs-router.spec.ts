@@ -1,5 +1,5 @@
 import { ListOngsUseCaseType } from '../../domain/usecases/list-ongs-usecase'
-import { HttpRequestType, HttpResponseType, ok } from '../helpers/http-helper'
+import { HttpRequestType, HttpResponseType, ok, serverError } from '../helpers/http-helper'
 
 function ListOngsUseCase () {
   return {
@@ -9,8 +9,12 @@ function ListOngsUseCase () {
 
 function ListOngsRouter (listOngsUseCase: ListOngsUseCaseType) {
   async function perform (httpRequest?: HttpRequestType): Promise<HttpResponseType> {
-    const ongs = await listOngsUseCase.perform()
-    return ok(ongs)
+    try {
+      const ongs = await listOngsUseCase.perform()
+      return ok(ongs)
+    } catch (error) {
+      return serverError()
+    }
   }
   return {
     perform
@@ -26,6 +30,17 @@ describe('ListOngsRouter', () => {
     await listOngsRouter.perform()
 
     expect(listOngsUseCaseSpy).toHaveBeenCalledTimes(1)
+  })
+  it('retuns 500 if ListOngsUseCase throws', async () => {
+    const listOngsUseCase = ListOngsUseCase()
+    const listOngsRouter = ListOngsRouter(listOngsUseCase)
+
+    jest.spyOn(listOngsUseCase, 'perform').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpResponse = await listOngsRouter.perform()
+
+    expect(httpResponse.statusCode).toBe(500)
   })
   it('returns 200 on success', async () => {
     const listOngsUseCase = ListOngsUseCase()
