@@ -3,11 +3,12 @@ import { MissingParamError } from '../../utils/errors/missing-param-error'
 import { badRequest, HttpRequestType, HttpResponseType, ok } from '../helpers/http-helper'
 
 function CreateIncidentRouter (createIncidentRepository: CreateIncidentRepositoryType) {
+  const requiredFields = ['title', 'description', 'value', 'ongId']
+
   async function perform (httpRequest: HttpRequestType): Promise<HttpResponseType> {
-    if (!httpRequest.body.title) return badRequest(new MissingParamError('title'))
-    if (!httpRequest.body.description) return badRequest(new MissingParamError('description'))
-    if (!httpRequest.body.value) return badRequest(new MissingParamError('value'))
-    if (!httpRequest.body.ongId) return badRequest(new MissingParamError('ongId'))
+    for (const field of requiredFields) {
+      if (!httpRequest.body[field]) return badRequest(new MissingParamError(field))
+    }
 
     return ok('ok')
   }
