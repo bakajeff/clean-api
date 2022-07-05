@@ -17,7 +17,7 @@ export function badRequest (error: Error): HttpResponseType {
 export function serverError (): HttpResponseType {
   return {
     statusCode: 500,
-    body: 'Unexpected server error'
+    body: new Error('Unexpected server error')
   }
 }
 
