@@ -1,19 +1,15 @@
-import crypto from 'crypto'
 import { MissingParamError } from '../../utils/errors/missing-param-error'
+import { GenerateRandomString } from '../../utils/helpers/generate-random-string'
 import { badRequest, HttpRequestType, ok, serverError } from '../helpers/http-helper'
 import { CreateIncidentRouter } from './create-incident-router'
-
-function generateRandomText () {
-  return crypto.randomBytes(20).toString('hex')
-}
 
 function makeFakeRequest (): HttpRequestType {
   return {
     body: {
-      title: generateRandomText(),
-      description: generateRandomText(),
+      title: GenerateRandomString(),
+      description: GenerateRandomString(),
       value: Math.random() * 2.5,
-      ongId: generateRandomText()
+      ongId: GenerateRandomString()
     }
   }
 }
@@ -124,7 +120,7 @@ describe('CreateIncidentRouter', () => {
     const sut = CreateIncidentRouter(createIncidentUseCase)
     const httpRequest = makeFakeRequest()
     const fakeOng = {
-      id: generateRandomText(),
+      id: GenerateRandomString(),
       ...httpRequest.body
     }
     jest.spyOn(createIncidentUseCase, 'perform').mockResolvedValueOnce(fakeOng)

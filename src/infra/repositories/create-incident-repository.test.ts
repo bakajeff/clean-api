@@ -1,33 +1,29 @@
-import crypto from 'crypto'
 import { IncidentType } from '../../domain/models/incident'
 import { OngModel } from '../../domain/models/ong'
+import { GenerateRandomString } from '../../utils/helpers/generate-random-string'
 import { db } from '../helpers/pg-promise-helper'
 import { CreateIncidentRepository } from './create-incident-repository-sql'
 
-function generateRandomText () {
-  return crypto.randomBytes(20).toString('hex')
-}
-
 function makeFakeIncidentData (ongId: string): IncidentType {
   return {
-    title: generateRandomText(),
-    description: generateRandomText(),
+    title: GenerateRandomString(),
+    description: GenerateRandomString(),
     value: Math.random() * 2.5,
     ongId
   }
 }
 
 describe('CreateIncidentRepository', () => {
-  const uniqueIdGenerator = { perform: jest.fn().mockReturnValue(generateRandomText()) }
+  const uniqueIdGenerator = { perform: jest.fn().mockReturnValue(GenerateRandomString()) }
   let ong: OngModel
 
   beforeEach(async () => {
     ong = await db.one('INSERT INTO ongs (id, name, email, whatsapp, city, uf) VALUES ($1, $2, $3, $4, $5, $6) returning *', [
-      generateRandomText(),
-      generateRandomText(),
-      generateRandomText(),
-      generateRandomText(),
-      generateRandomText(),
+      GenerateRandomString(),
+      GenerateRandomString(),
+      GenerateRandomString(),
+      GenerateRandomString(),
+      GenerateRandomString(),
       'uf'
     ])
   })

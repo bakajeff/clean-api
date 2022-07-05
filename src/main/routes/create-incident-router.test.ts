@@ -1,23 +1,19 @@
 import request from 'supertest'
-import crypto from 'crypto'
 import { db } from '../../infra/helpers/pg-promise-helper'
 import { app } from '../config/app'
 import { OngModel } from '../../domain/models/ong'
-
-function generateRandomText () {
-  return crypto.randomBytes(20).toString('hex')
-}
+import { GenerateRandomString } from '../../utils/helpers/generate-random-string'
 
 describe('CreateIncidentRouter', () => {
   let ong: OngModel
 
   beforeEach(async () => {
     ong = await db.one('INSERT INTO ongs (id, name, email, whatsapp, city, uf) VALUES ($1, $2, $3, $4, $5, $6) returning *', [
-      generateRandomText(),
-      generateRandomText(),
-      generateRandomText(),
-      generateRandomText(),
-      generateRandomText(),
+      GenerateRandomString(),
+      GenerateRandomString(),
+      GenerateRandomString(),
+      GenerateRandomString(),
+      GenerateRandomString(),
       'uf'
     ])
   })
@@ -29,8 +25,8 @@ describe('CreateIncidentRouter', () => {
 
   it('returns 200 on success', async () => {
     const response = await request(app).post('/api/incidents').send({
-      title: generateRandomText(),
-      description: generateRandomText(),
+      title: GenerateRandomString(),
+      description: GenerateRandomString(),
       value: Math.random() * 2.5,
       ongId: ong.id
     })

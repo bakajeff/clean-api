@@ -1,20 +1,15 @@
-import crypto from 'crypto'
 import { CreateIncidentUseCase } from './create-incident-usecase'
-
-function generateRandomText () {
-  return crypto.randomBytes(20).toString('hex')
-}
-
+import { GenerateRandomString } from '../../utils/helpers/generate-random-string'
 function generateRandomNumber () {
   return Math.random() * 2.5
 }
 
 function makeFakeIncidentData () {
   return {
-    title: generateRandomText(),
-    description: generateRandomText(),
+    title: GenerateRandomString(),
+    description: GenerateRandomString(),
     value: generateRandomNumber(),
-    ongId: generateRandomText()
+    ongId: GenerateRandomString()
   }
 }
 
@@ -52,7 +47,7 @@ describe('CreateIncidentUseCase', () => {
     const sut = CreateIncidentUseCase(createIncidentRepository)
     const fakeIncident = makeFakeIncidentData()
     const expectedIncident = {
-      id: generateRandomText(),
+      id: GenerateRandomString(),
       ...fakeIncident
     }
 
