@@ -3,7 +3,7 @@ import { CreateOngRepositoryType } from '../../domain/repositories/create-ong-re
 import type { UniqueIdGeneratorType } from '../../utils/helpers/unique-id-generator-adapter'
 
 export function CreateOngRepositoryMemory (uniqueIdGenerator: UniqueIdGeneratorType): CreateOngRepositoryType {
-  async function perform (ong:OngType): Promise<OngModel> {
+  async function perform (ong: OngType): Promise<OngModel> {
     return {
       id: uniqueIdGenerator.perform(),
       ...ong
