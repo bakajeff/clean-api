@@ -61,8 +61,6 @@ describe('CreateIncidentRepository', () => {
 
     const incident = await sut.perform(fakeIncident)
 
-    console.log(incident)
-
     expect(incident).toBeTruthy()
     expect(incident.id).toBeTruthy()
     expect(incident.title).toBe(fakeIncident.title)

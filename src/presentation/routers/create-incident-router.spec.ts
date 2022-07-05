@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 import { MissingParamError } from '../../utils/errors/missing-param-error'
-import { badRequest, HttpRequestType, ok } from '../helpers/http-helper'
+import { badRequest, HttpRequestType, ok, serverError } from '../helpers/http-helper'
 import { CreateIncidentRouter } from './create-incident-router'
 
 function generateRandomText () {
@@ -116,7 +116,9 @@ describe('CreateIncidentRouter', () => {
 
     const httpRequest = makeFakeRequest()
 
-    await sut.perform(httpRequest)
+    const httpResponse = await sut.perform(httpRequest)
+
+    expect(httpResponse).toEqual(serverError())
   })
   it('returns 200 on success', async () => {
     const sut = CreateIncidentRouter(createIncidentUseCase)
