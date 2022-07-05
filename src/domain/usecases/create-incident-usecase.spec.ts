@@ -1,20 +1,5 @@
 import crypto from 'crypto'
-
-type IncidentType = {
-  title: string,
-  description: string,
-  value: number,
-  ongId: string
-}
-
-function CreateIncidentUseCase (createIncidentRepository: any) {
-  async function perform (incident: IncidentType) {
-    return await createIncidentRepository.perform(incident)
-  }
-  return {
-    perform
-  }
-}
+import { CreateIncidentUseCase } from './create-incident-usecase'
 
 function generateRandomText () {
   return crypto.randomBytes(20).toString('hex')
