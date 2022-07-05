@@ -9,7 +9,7 @@ type IncidentType = {
 
 function CreateIncidentUseCase (createIncidentRepository: any) {
   async function perform (incident: IncidentType) {
-    createIncidentRepository.perform(incident)
+    return await createIncidentRepository.perform(incident)
   }
   return {
     perform
@@ -69,5 +69,22 @@ describe('CreateIncidentUseCase', () => {
     await sut.perform(fakeIncident)
 
     expect(createIncidentRepositorySpy).toHaveBeenCalledWith(fakeIncident)
+  })
+  it('create a valid incident', async () => {
+    const createIncidentRepository = {
+      perform: jest.fn()
+    }
+    const sut = CreateIncidentUseCase(createIncidentRepository)
+    const fakeIncident = makeFakeIncidentData()
+
+    const expectedIncident = {
+      id: generateRandomText(),
+      ...fakeIncident
+    }
+
+    jest.spyOn(createIncidentRepository, 'perform').mockResolvedValueOnce(expectedIncident)
+    const incident = await sut.perform(fakeIncident)
+
+    expect(incident).toEqual(expectedIncident)
   })
 })
