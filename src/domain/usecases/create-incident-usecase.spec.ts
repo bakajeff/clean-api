@@ -76,7 +76,6 @@ describe('CreateIncidentUseCase', () => {
     }
     const sut = CreateIncidentUseCase(createIncidentRepository)
     const fakeIncident = makeFakeIncidentData()
-
     const expectedIncident = {
       id: generateRandomText(),
       ...fakeIncident
