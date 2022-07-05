@@ -1,4 +1,5 @@
-import { ListOngsRepositoryType, ListOngsUseCase, ListOngsUseCaseType } from './list-ongs-usecase'
+import type { ListOngsRepositoryType } from '../repositories/list-ong-repository'
+import { ListOngsUseCase, ListOngsUseCaseType } from './list-ongs-usecase'
 
 function ListOngsRepository (): ListOngsRepositoryType {
   return {

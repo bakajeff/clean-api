@@ -1,8 +1,5 @@
 import type { OngModel } from '../models/ong'
-
-export type ListOngsRepositoryType = {
-  perform: () => Promise<OngModel[]>
-}
+import type { ListOngsRepositoryType } from '../repositories/list-ong-repository'
 
 export type ListOngsUseCaseType = {
   perform: () => Promise<OngModel[]>
