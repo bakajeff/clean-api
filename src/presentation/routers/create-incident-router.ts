@@ -1,8 +1,8 @@
-import { CreateIncidentRepositoryType } from '../../domain/repositories/create-incident-repository'
+import { CreateIncidentUseCaseType } from '../../domain/usecases/create-incident-usecase'
 import { MissingParamError } from '../../utils/errors/missing-param-error'
 import { badRequest, HttpRequestType, HttpResponseType, ok, serverError } from '../helpers/http-helper'
 
-export function CreateIncidentRouter (createIncidentRepository: CreateIncidentRepositoryType) {
+export function CreateIncidentRouter (createIncidentUseCase: CreateIncidentUseCaseType) {
   const requiredFields = ['title', 'description', 'value', 'ongId']
 
   async function perform (httpRequest: HttpRequestType): Promise<HttpResponseType> {
@@ -13,7 +13,7 @@ export function CreateIncidentRouter (createIncidentRepository: CreateIncidentRe
 
       const { title, description, value, ongId } = httpRequest.body
 
-      const incident = await createIncidentRepository.perform({
+      const incident = await createIncidentUseCase.perform({
         title,
         description,
         value,

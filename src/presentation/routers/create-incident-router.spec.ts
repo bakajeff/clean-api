@@ -19,10 +19,10 @@ function makeFakeRequest (): HttpRequestType {
 }
 
 describe('CreateIncidentRouter', () => {
-  const createIncidentRepository = { perform: jest.fn() }
+  const createIncidentUseCase = { perform: jest.fn() }
 
   it('returns 400 if no title', async () => {
-    const sut = CreateIncidentRouter(createIncidentRepository)
+    const sut = CreateIncidentRouter(createIncidentUseCase)
     const httpRequest = {
       body: {
         // title: 'any title',
@@ -37,7 +37,7 @@ describe('CreateIncidentRouter', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('title')))
   })
   it('returns 400 if no description', async () => {
-    const sut = CreateIncidentRouter(createIncidentRepository)
+    const sut = CreateIncidentRouter(createIncidentUseCase)
     const httpRequest = {
       body: {
         title: 'any title',
@@ -52,7 +52,7 @@ describe('CreateIncidentRouter', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('description')))
   })
   it('returns 400 if no value', async () => {
-    const sut = CreateIncidentRouter(createIncidentRepository)
+    const sut = CreateIncidentRouter(createIncidentUseCase)
     const httpRequest = {
       body: {
         title: 'any title',
@@ -67,7 +67,7 @@ describe('CreateIncidentRouter', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('value')))
   })
   it('returns 400 if no ongId', async () => {
-    const sut = CreateIncidentRouter(createIncidentRepository)
+    const sut = CreateIncidentRouter(createIncidentUseCase)
     const httpRequest = {
       body: {
         title: 'any title',
@@ -81,9 +81,9 @@ describe('CreateIncidentRouter', () => {
 
     expect(httpResponse).toEqual(badRequest(new MissingParamError('ongId')))
   })
-  it('calls CreateInsidentRepository once', async () => {
-    const sut = CreateIncidentRouter(createIncidentRepository)
-    const createIncidentRepositorySpy = jest.spyOn(createIncidentRepository, 'perform')
+  it('calls CreateIncidentUseCase once', async () => {
+    const sut = CreateIncidentRouter(createIncidentUseCase)
+    const createIncidentRepositorySpy = jest.spyOn(createIncidentUseCase, 'perform')
 
     const httpRequest = {
       body: {
@@ -98,9 +98,9 @@ describe('CreateIncidentRouter', () => {
 
     expect(createIncidentRepositorySpy).toHaveBeenCalledTimes(1)
   })
-  it('calls CreateInsidentRepository with correct values', async () => {
-    const sut = CreateIncidentRouter(createIncidentRepository)
-    const createIncidentRepositorySpy = jest.spyOn(createIncidentRepository, 'perform')
+  it('calls CreateIncidentUseCase with correct values', async () => {
+    const sut = CreateIncidentRouter(createIncidentUseCase)
+    const createIncidentRepositorySpy = jest.spyOn(createIncidentUseCase, 'perform')
 
     const httpRequest = makeFakeRequest()
 
@@ -108,9 +108,9 @@ describe('CreateIncidentRouter', () => {
 
     expect(createIncidentRepositorySpy).toHaveBeenCalledWith(httpRequest.body)
   })
-  it('returns 500 if CreateInsidentRepository throws', async () => {
-    const sut = CreateIncidentRouter(createIncidentRepository)
-    jest.spyOn(createIncidentRepository, 'perform').mockImplementationOnce(() => {
+  it('returns 500 if CreateIncidentUseCase throws', async () => {
+    const sut = CreateIncidentRouter(createIncidentUseCase)
+    jest.spyOn(createIncidentUseCase, 'perform').mockImplementationOnce(() => {
       throw new Error()
     })
 
@@ -119,13 +119,13 @@ describe('CreateIncidentRouter', () => {
     await sut.perform(httpRequest)
   })
   it('returns 200 on success', async () => {
-    const sut = CreateIncidentRouter(createIncidentRepository)
+    const sut = CreateIncidentRouter(createIncidentUseCase)
     const httpRequest = makeFakeRequest()
     const fakeOng = {
       id: generateRandomText(),
       ...httpRequest.body
     }
-    jest.spyOn(createIncidentRepository, 'perform').mockResolvedValueOnce(fakeOng)
+    jest.spyOn(createIncidentUseCase, 'perform').mockResolvedValueOnce(fakeOng)
 
     const httpResponse = await sut.perform(httpRequest)
 
