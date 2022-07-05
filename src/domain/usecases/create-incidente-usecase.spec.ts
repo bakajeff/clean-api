@@ -19,4 +19,17 @@ describe('CreateIncidentUseCase', () => {
 
     expect(createIncidentRepositorySpy).toHaveBeenCalledTimes(1)
   })
+  it('throws if CreateIncidentRepository throws', async () => {
+    const createIncidentRepository = {
+      perform: jest.fn()
+    }
+    const sut = CreateIncidentUseCase(createIncidentRepository)
+    jest.spyOn(createIncidentRepository, 'perform').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const promise = sut.perform()
+
+    expect(promise).rejects.toThrow()
+  })
 })
