@@ -10,13 +10,23 @@ function CreateIncidentRepository (uniqueIdGenerator: UniqueIdGeneratorType) {
 }
 
 describe('CreateIncidentRepository', () => {
+  const uniqueIdGenerator = { perform: jest.fn() }
   it('calls UniqueIdGenerator once', async () => {
-    const uniqueIdGenerator = { perform: jest.fn() }
     const sut = CreateIncidentRepository(uniqueIdGenerator)
     const uniqueIdGeneratorSpy = jest.spyOn(uniqueIdGenerator, 'perform')
 
     await sut.perform()
 
     expect(uniqueIdGeneratorSpy).toHaveBeenCalledTimes(1)
+  })
+  it('throws if UniqueIdGenerator throws', async () => {
+    const sut = CreateIncidentRepository(uniqueIdGenerator)
+    jest.spyOn(uniqueIdGenerator, 'perform').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const promise = sut.perform()
+
+    expect(promise).rejects.toThrow()
   })
 })
