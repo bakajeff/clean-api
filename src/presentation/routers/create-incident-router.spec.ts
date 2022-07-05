@@ -6,6 +6,7 @@ function CreateIncidentRouter (createIncidentRepository: CreateIncidentRepositor
   async function perform (httpRequest: HttpRequestType): Promise<HttpResponseType> {
     if (!httpRequest.body.title) return badRequest(new MissingParamError('title'))
     if (!httpRequest.body.description) return badRequest(new MissingParamError('description'))
+    if (!httpRequest.body.value) return badRequest(new MissingParamError('value'))
 
     return ok('ok')
   }
@@ -46,5 +47,20 @@ describe('CreateIncidentRouter', () => {
     const httpResponse = await sut.perform(httpRequest)
 
     expect(httpResponse).toEqual(badRequest(new MissingParamError('description')))
+  })
+  it('returns 400 if no value', async () => {
+    const sut = CreateIncidentRouter(createIncidentRepository)
+    const httpRequest = {
+      body: {
+        title: 'any title',
+        description: 'any description',
+        // value: 245453.53453,
+        ongId: 'any ong id'
+      }
+    }
+
+    const httpResponse = await sut.perform(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('value')))
   })
 })
