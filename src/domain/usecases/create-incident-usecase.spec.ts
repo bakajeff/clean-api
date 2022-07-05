@@ -19,10 +19,9 @@ function makeFakeIncidentData () {
 }
 
 describe('CreateIncidentUseCase', () => {
+  const createIncidentRepository = { perform: jest.fn() }
+
   it('calls CreateIncidentRepository once', async () => {
-    const createIncidentRepository = {
-      perform: jest.fn()
-    }
     const sut = CreateIncidentUseCase(createIncidentRepository)
     const createIncidentRepositorySpy = jest.spyOn(createIncidentRepository, 'perform')
 
@@ -31,9 +30,6 @@ describe('CreateIncidentUseCase', () => {
     expect(createIncidentRepositorySpy).toHaveBeenCalledTimes(1)
   })
   it('throws if CreateIncidentRepository throws', async () => {
-    const createIncidentRepository = {
-      perform: jest.fn()
-    }
     const sut = CreateIncidentUseCase(createIncidentRepository)
     jest.spyOn(createIncidentRepository, 'perform').mockImplementationOnce(() => {
       throw new Error()
@@ -44,9 +40,6 @@ describe('CreateIncidentUseCase', () => {
     expect(promise).rejects.toThrow()
   })
   it('calls CreateIncidentRepository with correct values', async () => {
-    const createIncidentRepository = {
-      perform: jest.fn()
-    }
     const sut = CreateIncidentUseCase(createIncidentRepository)
     const fakeIncident = makeFakeIncidentData()
 
@@ -56,9 +49,6 @@ describe('CreateIncidentUseCase', () => {
     expect(createIncidentRepositorySpy).toHaveBeenCalledWith(fakeIncident)
   })
   it('create a valid incident', async () => {
-    const createIncidentRepository = {
-      perform: jest.fn()
-    }
     const sut = CreateIncidentUseCase(createIncidentRepository)
     const fakeIncident = makeFakeIncidentData()
     const expectedIncident = {
