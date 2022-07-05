@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 import { db } from '../helpers/pg-promise-helper'
-import { ListOngsRepository } from './list-ongs-repository'
+import { ListOngsRepository } from './list-ongs-repository-sql'
 
 function generateRandomString (length: number = 20) {
   return crypto.randomBytes(length).toString('hex')

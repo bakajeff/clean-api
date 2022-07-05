@@ -2,7 +2,7 @@ import crypto from 'crypto'
 import { IncidentType } from '../../domain/models/incident'
 import { OngModel } from '../../domain/models/ong'
 import { db } from '../helpers/pg-promise-helper'
-import { CreateIncidentRepository } from './create-incident-repository'
+import { CreateIncidentRepository } from './create-incident-repository-sql'
 
 function generateRandomText () {
   return crypto.randomBytes(20).toString('hex')
