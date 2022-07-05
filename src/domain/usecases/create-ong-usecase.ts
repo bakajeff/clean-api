@@ -5,7 +5,7 @@ export type CreateOngUseCaseType = {
   perform: (ong: OngType) => Promise<OngModel | void>
 }
 
-export function CreateOngUseCase (createOngRepository: CreateOngRepositoryType) {
+export function CreateOngUseCase (createOngRepository: CreateOngRepositoryType): CreateOngUseCaseType {
   async function perform (ong: OngType) {
     return await createOngRepository.perform(ong)
   }
