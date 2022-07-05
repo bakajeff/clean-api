@@ -9,10 +9,12 @@ function UniqueIdGenerator () {
 
 describe('CreateOngRepositorySql', () => {
   beforeEach(async () => {
+    await db.none('delete from incidents')
     await db.none('delete from ongs')
   })
 
   afterAll(async () => {
+    await db.none('delete from incidents')
     await db.none('delete from ongs')
   })
 
