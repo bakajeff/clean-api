@@ -11,11 +11,11 @@ describe('CreateIncidentRouter', () => {
     await db.none('DELETE FROM incidents')
     await db.none('DELETE FROM ongs')
     ong = await db.one('INSERT INTO ongs (id, name, email, whatsapp, city, uf) VALUES ($1, $2, $3, $4, $5, $6) returning *', [
-      'incident router value',
-      'incident router value',
-      'incident router value',
-      'incident router value',
-      'incident router value',
+      GenerateRandomString(),
+      GenerateRandomString(),
+      GenerateRandomString(),
+      GenerateRandomString(),
+      GenerateRandomString(),
       'uf'
     ])
   })

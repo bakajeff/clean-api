@@ -8,7 +8,7 @@
     "lint": "tsc && eslint src --ext .ts --fix",
     "test": "jest --passWithNoTests --noStackTrace",
     "test:unit": "npm run test -- --watch -c jest-unit.config.ts",
-    "test:integration": "npm run test -- --watch -c jest-integration.config.ts",
+    "test:integration": "npm run test -- -i --watch -c jest-integration.config.ts",
     "test:staged": "npm run test -- -i",
     "prepare": "husky install"
   },
