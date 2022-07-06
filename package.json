@@ -9,6 +9,7 @@
     "test": "jest --passWithNoTests --noStackTrace",
     "test:unit": "npm run test -- --watch -c jest-unit.config.ts",
     "test:integration": "npm run test -- --watch -c jest-integration.config.ts",
+    "test:staged": "npm run test -- -i",
     "prepare": "husky install"
   },
   "keywords": [],
@@ -17,7 +18,7 @@
   "lint-staged": {
     "*.ts": [
       "npm run lint",
-      "npm run test"
+      "npm run test:staged"
     ]
   },
   "devDependencies": {

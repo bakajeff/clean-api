@@ -3,11 +3,17 @@ import { db } from '../../infra/helpers/pg-promise-helper'
 import { app } from '../config/app'
 
 describe('CreateOngRouter', () => {
-  afterEach(async () => {
-    await db.none('DELETE from ongs')
+  beforeEach(async () => {
+    await db.none('DELETE FROM incidents')
+    await db.none('DELETE FROM ongs')
   })
 
-  it('returns an account on success', async () => {
+  afterEach(async () => {
+    await db.none('DELETE FROM incidents')
+    await db.none('DELETE FROM ongs')
+  })
+
+  it('returns an ong on success', async () => {
     const response = await request(app).post('/api/ong/new').send({
       name: 'any ong',
       email: 'any@email.com',

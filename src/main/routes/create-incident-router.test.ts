@@ -8,12 +8,14 @@ describe('CreateIncidentRouter', () => {
   let ong: OngModel
 
   beforeEach(async () => {
+    await db.none('DELETE FROM incidents')
+    await db.none('DELETE FROM ongs')
     ong = await db.one('INSERT INTO ongs (id, name, email, whatsapp, city, uf) VALUES ($1, $2, $3, $4, $5, $6) returning *', [
-      GenerateRandomString(),
-      GenerateRandomString(),
-      GenerateRandomString(),
-      GenerateRandomString(),
-      GenerateRandomString(),
+      'incident router value',
+      'incident router value',
+      'incident router value',
+      'incident router value',
+      'incident router value',
       'uf'
     ])
   })
