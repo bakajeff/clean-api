@@ -1,3 +1,4 @@
+import { InvalidParamError } from '../../utils/errors/invalid-param-error'
 import { IncidentModel, IncidentType } from '../models/incident'
 import { OngModel } from '../models/ong'
 import { CreateIncidentRepositoryType } from '../repositories/create-incident-repository'
@@ -12,7 +13,10 @@ type GetOngByIdRepositortyType = {
 
 export function CreateIncidentUseCase (createIncidentRepository: CreateIncidentRepositoryType, getOngByIdRepository: GetOngByIdRepositortyType) {
   async function perform (incident: IncidentType) {
-    await getOngByIdRepository.perform(incident.ongId)
+    const ong = await getOngByIdRepository.perform(incident.ongId)
+
+    if (!ong) throw new InvalidParamError('ongId')
+
     return await createIncidentRepository.perform(incident)
   }
   return {

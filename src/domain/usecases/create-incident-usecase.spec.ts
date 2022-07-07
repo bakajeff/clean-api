@@ -1,5 +1,6 @@
 import { CreateIncidentUseCase } from './create-incident-usecase'
 import { GenerateRandomString } from '../../utils/helpers/generate-random-string'
+import { InvalidParamError } from '../../utils/errors/invalid-param-error'
 
 function generateRandomNumber () {
   return Math.random() * 2.5
@@ -16,7 +17,7 @@ function makeFakeIncidentData () {
 
 describe('CreateIncidentUseCase', () => {
   const createIncidentRepository = { perform: jest.fn() }
-  const getOngByIdRepository = { perform: jest.fn() }
+  const getOngByIdRepository = { perform: jest.fn().mockReturnValue({}) }
 
   it('calls CreateIncidentRepository once', async () => {
     const createIncidentRepository = { perform: jest.fn() }
@@ -47,7 +48,7 @@ describe('CreateIncidentUseCase', () => {
     expect(createIncidentRepositorySpy).toHaveBeenCalledWith(fakeIncident)
   })
   it('calls getOngByIdRepository once', async () => {
-    const getOngByIdRepository = { perform: jest.fn() }
+    const getOngByIdRepository = { perform: jest.fn().mockResolvedValue({}) }
     const sut = CreateIncidentUseCase(createIncidentRepository, getOngByIdRepository)
     const getOngByIdRepositorySpy = jest.spyOn(getOngByIdRepository, 'perform')
 
@@ -56,7 +57,7 @@ describe('CreateIncidentUseCase', () => {
     expect(getOngByIdRepositorySpy).toHaveBeenCalledTimes(1)
   })
   it('calls getOngByIdRepository with correct value', async () => {
-    const getOngByIdRepository = { perform: jest.fn() }
+    const getOngByIdRepository = { perform: jest.fn().mockResolvedValue({}) }
     const sut = CreateIncidentUseCase(createIncidentRepository, getOngByIdRepository)
     const getOngByIdRepositorySpy = jest.spyOn(getOngByIdRepository, 'perform')
     const fakeIncident = makeFakeIncidentData()
@@ -64,6 +65,15 @@ describe('CreateIncidentUseCase', () => {
     await sut.perform(fakeIncident)
 
     expect(getOngByIdRepositorySpy).toHaveBeenCalledWith(fakeIncident.ongId)
+  })
+  it('throws if invalid ongId', async () => {
+    const sut = CreateIncidentUseCase(createIncidentRepository, getOngByIdRepository)
+    const fakeIncident = makeFakeIncidentData()
+
+    jest.spyOn(getOngByIdRepository, 'perform').mockResolvedValueOnce(null)
+    const promise = sut.perform(fakeIncident)
+
+    expect(promise).rejects.toThrow(new InvalidParamError('ongId'))
   })
   it('create a valid incident', async () => {
     const sut = CreateIncidentUseCase(createIncidentRepository, getOngByIdRepository)
