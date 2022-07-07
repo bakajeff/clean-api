@@ -55,6 +55,16 @@ describe('CreateIncidentUseCase', () => {
 
     expect(getOngByIdRepositorySpy).toHaveBeenCalledTimes(1)
   })
+  it('calls getOngByIdRepository with correct value', async () => {
+    const getOngByIdRepository = { perform: jest.fn() }
+    const sut = CreateIncidentUseCase(createIncidentRepository, getOngByIdRepository)
+    const getOngByIdRepositorySpy = jest.spyOn(getOngByIdRepository, 'perform')
+    const fakeIncident = makeFakeIncidentData()
+
+    await sut.perform(fakeIncident)
+
+    expect(getOngByIdRepositorySpy).toHaveBeenCalledWith(fakeIncident.ongId)
+  })
   it('create a valid incident', async () => {
     const sut = CreateIncidentUseCase(createIncidentRepository, getOngByIdRepository)
     const fakeIncident = makeFakeIncidentData()
