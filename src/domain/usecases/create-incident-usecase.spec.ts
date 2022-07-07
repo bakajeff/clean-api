@@ -1,5 +1,6 @@
 import { CreateIncidentUseCase } from './create-incident-usecase'
 import { GenerateRandomString } from '../../utils/helpers/generate-random-string'
+
 function generateRandomNumber () {
   return Math.random() * 2.5
 }
@@ -15,9 +16,11 @@ function makeFakeIncidentData () {
 
 describe('CreateIncidentUseCase', () => {
   const createIncidentRepository = { perform: jest.fn() }
+  const getOngByIdRepository = { perform: jest.fn() }
 
   it('calls CreateIncidentRepository once', async () => {
-    const sut = CreateIncidentUseCase(createIncidentRepository)
+    const createIncidentRepository = { perform: jest.fn() }
+    const sut = CreateIncidentUseCase(createIncidentRepository, getOngByIdRepository)
     const createIncidentRepositorySpy = jest.spyOn(createIncidentRepository, 'perform')
 
     await sut.perform(makeFakeIncidentData())
@@ -25,7 +28,7 @@ describe('CreateIncidentUseCase', () => {
     expect(createIncidentRepositorySpy).toHaveBeenCalledTimes(1)
   })
   it('throws if CreateIncidentRepository throws', async () => {
-    const sut = CreateIncidentUseCase(createIncidentRepository)
+    const sut = CreateIncidentUseCase(createIncidentRepository, getOngByIdRepository)
     jest.spyOn(createIncidentRepository, 'perform').mockImplementationOnce(() => {
       throw new Error()
     })
@@ -35,7 +38,7 @@ describe('CreateIncidentUseCase', () => {
     expect(promise).rejects.toThrow()
   })
   it('calls CreateIncidentRepository with correct values', async () => {
-    const sut = CreateIncidentUseCase(createIncidentRepository)
+    const sut = CreateIncidentUseCase(createIncidentRepository, getOngByIdRepository)
     const fakeIncident = makeFakeIncidentData()
 
     const createIncidentRepositorySpy = jest.spyOn(createIncidentRepository, 'perform')
@@ -43,8 +46,17 @@ describe('CreateIncidentUseCase', () => {
 
     expect(createIncidentRepositorySpy).toHaveBeenCalledWith(fakeIncident)
   })
+  it('calls getOngByIdRepository once', async () => {
+    const getOngByIdRepository = { perform: jest.fn() }
+    const sut = CreateIncidentUseCase(createIncidentRepository, getOngByIdRepository)
+    const getOngByIdRepositorySpy = jest.spyOn(getOngByIdRepository, 'perform')
+
+    await sut.perform(makeFakeIncidentData())
+
+    expect(getOngByIdRepositorySpy).toHaveBeenCalledTimes(1)
+  })
   it('create a valid incident', async () => {
-    const sut = CreateIncidentUseCase(createIncidentRepository)
+    const sut = CreateIncidentUseCase(createIncidentRepository, getOngByIdRepository)
     const fakeIncident = makeFakeIncidentData()
     const expectedIncident = {
       id: GenerateRandomString(),
