@@ -7,7 +7,7 @@ export function LogDecorator (route: RouterType, logRepository: LogRepositoryTyp
     const response = await route.perform(httpRequest)
 
     if (response.statusCode === 500) {
-      logRepository.perform(response.body.stack)
+      await logRepository.perform(response.body.stack)
     }
 
     return response
