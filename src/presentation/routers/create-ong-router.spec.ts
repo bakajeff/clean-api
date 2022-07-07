@@ -4,6 +4,7 @@ import { InvalidParamError } from '../../utils/errors/invalid-param-error'
 import { MissingParamError } from '../../utils/errors/missing-param-error'
 import { EmailValidatorType } from '../../utils/helpers/email-validator'
 import { WhatsappValidatorType } from '../../utils/helpers/whatsapp-validator'
+import { ServerError } from '../errors/server-error'
 import { badRequest, ok, HttpRequestType, serverError } from '../helpers/http-helper'
 import { CreateOngRouter } from './create-ong-router'
 
@@ -174,7 +175,7 @@ describe('CreateOngRouter', () => {
     })
     const httpResponse = await sut.perform(httpRequest)
 
-    expect(httpResponse).toEqual(serverError())
+    expect(httpResponse).toEqual(serverError(new ServerError()))
   })
   it('calls whatsappValidator with correct value', async () => {
     const sut = CreateOngRouter(emailValidator, whatsappValidator, createOngUseCase)
@@ -211,7 +212,7 @@ describe('CreateOngRouter', () => {
     })
     const httpResponse = await sut.perform(httpRequest)
 
-    expect(httpResponse).toEqual(serverError())
+    expect(httpResponse).toEqual(serverError(new ServerError()))
   })
   it('calls CreateOngUseCase with correct values', async () => {
     const sut = CreateOngRouter(emailValidator, whatsappValidator, createOngUseCase)
@@ -239,7 +240,7 @@ describe('CreateOngRouter', () => {
 
     const httpResponse = await sut.perform(httpRequest)
 
-    expect(httpResponse).toEqual(serverError())
+    expect(httpResponse).toEqual(serverError(new ServerError()))
   })
   it('returns 200 when valid data', async () => {
     const sut = CreateOngRouter(emailValidator, whatsappValidator, createOngUseCase)

@@ -1,3 +1,5 @@
+import { ServerError } from '../errors/server-error'
+
 export type HttpRequestType = {
   body?: any
 }
@@ -14,10 +16,10 @@ export function badRequest (error: Error): HttpResponseType {
   }
 }
 
-export function serverError (): HttpResponseType {
+export function serverError (error: Error): HttpResponseType {
   return {
     statusCode: 500,
-    body: new Error('Unexpected server error')
+    body: new ServerError(error.stack)
   }
 }
 

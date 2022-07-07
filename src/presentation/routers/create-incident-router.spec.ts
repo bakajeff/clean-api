@@ -1,5 +1,6 @@
 import { MissingParamError } from '../../utils/errors/missing-param-error'
 import { GenerateRandomString } from '../../utils/helpers/generate-random-string'
+import { ServerError } from '../errors/server-error'
 import { badRequest, HttpRequestType, ok, serverError } from '../helpers/http-helper'
 import { CreateIncidentRouter } from './create-incident-router'
 
@@ -114,7 +115,7 @@ describe('CreateIncidentRouter', () => {
 
     const httpResponse = await sut.perform(httpRequest)
 
-    expect(httpResponse).toEqual(serverError())
+    expect(httpResponse).toEqual(serverError(new ServerError()))
   })
   it('returns 200 on success', async () => {
     const sut = CreateIncidentRouter(createIncidentUseCase)

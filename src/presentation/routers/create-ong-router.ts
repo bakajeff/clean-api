@@ -33,7 +33,7 @@ export function CreateOngRouter (emailValidator: EmailValidatorType, whatsappVal
 
       return ok(ong)
     } catch (error) {
-      return serverError()
+      return serverError(error as Error)
     }
   }
 

@@ -7,7 +7,7 @@ export function ListOngsRouter (listOngsUseCase: ListOngsUseCaseType) {
       const ongs = await listOngsUseCase.perform()
       return ok(ongs)
     } catch (error) {
-      return serverError()
+      return serverError(error as Error)
     }
   }
   return {

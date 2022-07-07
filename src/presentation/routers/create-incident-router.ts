@@ -22,7 +22,7 @@ export function CreateIncidentRouter (createIncidentUseCase: CreateIncidentUseCa
 
       return ok(incident)
     } catch (error) {
-      return serverError()
+      return serverError(error as Error)
     }
   }
   return {
