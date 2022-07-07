@@ -1,15 +1,7 @@
 import { OngModel } from '../../domain/models/ong'
 import { GenerateRandomString } from '../../utils/helpers/generate-random-string'
 import { db } from '../helpers/pg-promise-helper'
-
-function GetOngByIdRepository () {
-  async function perform (ongId: string): Promise<OngModel | null> {
-    return await db.oneOrNone<OngModel | null>('SELECT * FROM ongs WHERE id = $1', ongId)
-  }
-  return {
-    perform
-  }
-}
+import { GetOngByIdRepository } from './get-ong-by-id-repository-sql'
 
 describe('GetOngByIdRepository', () => {
   let ongId: string
