@@ -1,4 +1,5 @@
 import { CreateIncidentUseCaseType } from '../../domain/usecases/create-incident-usecase'
+import { InvalidParamError } from '../../utils/errors/invalid-param-error'
 import { MissingParamError } from '../../utils/errors/missing-param-error'
 import { badRequest, HttpRequestType, HttpResponseType, ok, serverError } from '../helpers/http-helper'
 
@@ -22,6 +23,9 @@ export function CreateIncidentRouter (createIncidentUseCase: CreateIncidentUseCa
 
       return ok(incident)
     } catch (error) {
+      if (error instanceof InvalidParamError) {
+        return badRequest(error)
+      }
       return serverError(error as Error)
     }
   }

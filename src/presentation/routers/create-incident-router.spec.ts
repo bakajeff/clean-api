@@ -1,3 +1,4 @@
+import { InvalidParamError } from '../../utils/errors/invalid-param-error'
 import { MissingParamError } from '../../utils/errors/missing-param-error'
 import { GenerateRandomString } from '../../utils/helpers/generate-random-string'
 import { ServerError } from '../errors/server-error'
@@ -78,7 +79,26 @@ describe('CreateIncidentRouter', () => {
 
     expect(httpResponse).toEqual(badRequest(new MissingParamError('ongId')))
   })
+  it('returns 400 if invalid ongId', async () => {
+    const sut = CreateIncidentRouter(createIncidentUseCase)
+    const httpRequest = {
+      body: {
+        title: 'any title',
+        description: 'any description',
+        value: 245453.53453,
+        ongId: 'invalid ong id'
+      }
+    }
+
+    jest.spyOn(createIncidentUseCase, 'perform').mockImplementationOnce(() => {
+      throw new InvalidParamError('ongId')
+    })
+    const httpResponse = await sut.perform(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('ongId')))
+  })
   it('calls CreateIncidentUseCase once', async () => {
+    const createIncidentUseCase = { perform: jest.fn() }
     const sut = CreateIncidentRouter(createIncidentUseCase)
     const createIncidentRepositorySpy = jest.spyOn(createIncidentUseCase, 'perform')
 
