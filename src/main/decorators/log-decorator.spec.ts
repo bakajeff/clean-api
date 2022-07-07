@@ -1,25 +1,6 @@
+import { ok, serverError } from '../../presentation/helpers/http-helper'
 import { ServerError } from '../../presentation/errors/server-error'
-import { HttpRequestType, ok, serverError } from '../../presentation/helpers/http-helper'
-import { RouterType } from '../../presentation/helpers/router'
-
-type LogRepositoryType = {
-  perform: (stack: string) => Promise<void>
-}
-
-function LogDecorator (route: RouterType, logRepository: LogRepositoryType) {
-  async function perform (httpRequest: HttpRequestType) {
-    const response = await route.perform(httpRequest)
-
-    if (response.statusCode === 500) {
-      logRepository.perform(response.body.stack)
-    }
-
-    return response
-  }
-  return {
-    perform
-  }
-}
+import { LogDecorator } from './log-decorator'
 
 describe('LogDecorator', () => {
   const route = { perform: jest.fn().mockResolvedValue(ok({ name: 'any value' })) }
