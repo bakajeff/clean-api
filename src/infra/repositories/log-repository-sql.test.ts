@@ -13,7 +13,7 @@ describe('LogRepository', () => {
   it('retuns a log on success', async () => {
     const logRepository = LogRepository()
 
-    const log = await logRepository.perform('stack', new Date().toISOString())
+    const log = await logRepository.perform('stack')
 
     expect(log).toBeTruthy()
   })
