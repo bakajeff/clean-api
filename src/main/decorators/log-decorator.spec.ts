@@ -17,7 +17,7 @@ function LogDecorator (route: RouterType, logRepository: LogRepositoryType) {
 }
 
 describe('LogDecorator', () => {
-  it('calls route perform', async () => {
+  it('calls route perform once', async () => {
     const route = { perform: jest.fn() }
     const logRepository = { perform: jest.fn() }
     const logDecorator = LogDecorator(route, logRepository)
@@ -30,6 +30,24 @@ describe('LogDecorator', () => {
     })
 
     expect(routeSpy).toHaveBeenCalledTimes(1)
+  })
+  it('calls route perform with correct values', async () => {
+    const route = { perform: jest.fn() }
+    const logRepository = { perform: jest.fn() }
+    const logDecorator = LogDecorator(route, logRepository)
+    const routeSpy = jest.spyOn(route, 'perform')
+
+    await logDecorator.perform({
+      body: {
+        name: 'any_name'
+      }
+    })
+
+    expect(routeSpy).toHaveBeenCalledWith({
+      body: {
+        name: 'any_name'
+      }
+    })
   })
   it('retuns the same value as route', async () => {
     const route = { perform: jest.fn() }
